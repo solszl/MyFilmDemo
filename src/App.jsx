@@ -9,6 +9,7 @@ function App() {
 
   useEffect(() => {
     const pxPerInch = getPX();
+    console.log(pxPerInch);
   }, []);
 
   return (
