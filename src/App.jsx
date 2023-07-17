@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import reactLogo from "./assets/react.svg";
+import FilmDatabase from "./logic/db/film-db";
 import { getPX } from "./logic/utils/ppi";
 import viteLogo from "/vite.svg";
 
@@ -10,6 +11,16 @@ function App() {
   useEffect(() => {
     const pxPerInch = getPX();
     console.log(pxPerInch);
+
+    // const fn = async () => {
+    //   let dbm = new DBManager();
+    //   await dbm.query();
+    // };
+
+    // fn();
+
+    let filmDB = new FilmDatabase();
+    console.log(filmDB);
   }, []);
 
   return (
