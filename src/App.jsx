@@ -1,52 +1,82 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import reactLogo from "./assets/react.svg";
-import FilmDatabase from "./logic/db/film-db";
-import { getPX } from "./logic/utils/ppi";
-import viteLogo from "/vite.svg";
+import { useDrag, useDrop } from "ahooks";
+import React, { useRef, useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0);
+const DragItem = ({ data }) => {
+  const dragRef = useRef(null);
 
-  useEffect(() => {
-    const pxPerInch = getPX();
-    console.log(pxPerInch);
+  const [dragging, setDragging] = useState(false);
 
-    // const fn = async () => {
-    //   let dbm = new DBManager();
-    //   await dbm.query();
-    // };
-
-    // fn();
-
-    let filmDB = new FilmDatabase();
-    console.log(filmDB);
-  }, []);
+  useDrag(data, dragRef, {
+    onDragStart: () => {
+      setDragging(true);
+    },
+    onDragEnd: () => {
+      setDragging(false);
+    },
+  });
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div
+      ref={dragRef}
+      style={{
+        border: "1px solid #e8e8e8",
+        padding: 16,
+        width: 80,
+        textAlign: "center",
+        marginRight: 16,
+      }}
+    >
+      {dragging ? "dragging" : `box-${data}`}
+    </div>
   );
-}
+};
+
+const App = () => {
+  const [isHovering, setIsHovering] = useState(false);
+
+  const dropRef = useRef(null);
+
+  useDrop(dropRef, {
+    onText: (text, e) => {
+      console.log(e);
+      alert(`'text: ${text}' dropped`);
+    },
+    onFiles: (files, e) => {
+      console.log(e, files);
+      alert(`${files.length} file dropped`);
+    },
+    onUri: (uri, e) => {
+      console.log(e);
+      alert(`uri: ${uri} dropped`);
+    },
+    onDom: (content, e) => {
+      alert(`custom: ${content} dropped`);
+    },
+    onDragEnter: () => setIsHovering(true),
+    onDragLeave: () => setIsHovering(false),
+  });
+
+  return (
+    <div>
+      <div
+        ref={dropRef}
+        style={{
+          border: "1px dashed #e8e8e8",
+          padding: 16,
+          textAlign: "center",
+          borderLeft: isHovering ? "3px solid #f00" : "",
+        }}
+      >
+        {isHovering ? "release here" : "drop here"}
+      </div>
+
+      <div style={{ display: "flex", marginTop: 8 }}>
+        {["1", "2", "3", "4", "5"].map((e, i) => (
+          <DragItem key={e} data={e} />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default App;
