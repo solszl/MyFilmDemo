@@ -1,5 +1,6 @@
 import { useDrag, useDrop } from "ahooks";
 import React, { useRef, useState } from "react";
+import Section from "./grid";
 
 const DragItem = ({ data }) => {
   const dragRef = useRef(null);
@@ -58,7 +59,7 @@ const App = () => {
 
   return (
     <div>
-      <div
+      {/* <div
         ref={dropRef}
         style={{
           border: "1px dashed #e8e8e8",
@@ -74,7 +75,8 @@ const App = () => {
         {["1", "2", "3", "4", "5"].map((e, i) => (
           <DragItem key={e} data={e} />
         ))}
-      </div>
+      </div> */}
+      <Section />
     </div>
   );
 };
