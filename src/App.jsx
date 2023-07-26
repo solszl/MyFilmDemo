@@ -1,6 +1,7 @@
 import { useDrag, useDrop } from "ahooks";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Section from "./grid";
+import { getPX } from "./logic/utils/ppi";
 
 const DragItem = ({ data }) => {
   const dragRef = useRef(null);
@@ -56,6 +57,11 @@ const App = () => {
     onDragEnter: () => setIsHovering(true),
     onDragLeave: () => setIsHovering(false),
   });
+
+  useEffect(() => {
+    const a = getPX();
+    console.log(a);
+  }, []);
 
   return (
     <div>
